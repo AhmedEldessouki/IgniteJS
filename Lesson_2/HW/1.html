@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>1</title>
+
+	<script>
+		// ###Задача 1. 
+		// Напишите функцию, которая принимает 1 параметр.
+		// При первом вызове она его запоминает, при втором - суммирует переданный параметр с параметром, переданным при предыдущем вызове. 
+
+		// Например: 
+		// ```
+		// sum(3) = 3
+		// sum(5) = 8
+		// sum(228) = 236 
+		// ```
+
+		function sum(x) {
+			sum.x = (sum.x || 0) + x;
+
+			return  sum.x;
+		}
+
+		alert(sum(3));
+		alert(sum(5));
+		alert(sum(228));
+	</script>
+	
+</head>
+<body>
+	<p>Lesson 2 Homework Task 1</p>
+</body>
+</html>

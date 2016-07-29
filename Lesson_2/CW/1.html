@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>1</title>
+
+	<script>
+
+	// ###Задача 1. 
+	// Каков будет результат выполнения этого кода?
+	// ```
+	// var value = 0;
+	// function f() {
+	//   if (1) {
+	//     value = true;
+	//   } else {
+	//     var value = false;
+	//   }
+	//   alert( value );
+	// }
+	// f();
+	// ```
+	// Изменится ли внешняя переменная value ?
+	// Как изменится рузультат, если из строки var value = false убрать ключевое слово var?
+	
+	var value = 0;
+
+	function f() {
+		if (1) {
+			value = true;
+		} else {
+			var value = false;
+		}
+
+		alert( value );
+	}
+
+	f();
+	</script>
+	
+</head>
+<body>
+	<p>Lesson 2 Classwork Task 1</p>
+	<ol>
+		<li>true. 1 является истинным значением, поэтому всегда выполняется код if</li>
+		<li>Нет, поскольку в теле функции есть объявление данной переменной и срабатывает механизм поднятия переменных.</li>
+		<li>Результат тот же - true, значение глобальной переменной valuе изменяется на true</li>
+	</ol>
+</body>
+</html>
