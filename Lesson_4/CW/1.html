@@ -10,9 +10,9 @@
 
 		function sumArgs() {
 			var result = 0;
+
 			[].forEach.call(arguments, function(item) {
-				result = result + item;
-			 	return result;
+				result += item;
 			});	
 
 			return result;
@@ -22,6 +22,7 @@
 			// 	return a + b;
 			// });	
 		};
+		
 		alert(sumArgs(4, 9, 6, 2));	//21
 	</script>
 	

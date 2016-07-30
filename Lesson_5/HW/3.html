@@ -10,7 +10,17 @@
 
         // Например, var timer=10, каждую секунду на странице меняется числа - 10, 9, 8... и так далее до нуля.
 
+        var timer = 10;
+        
+        var countdown = setInterval(function() {
+            document.write(timer--);
+            document.close();
 
+            if (timer < 0) {
+                clearInterval(countdown);
+                alert("Отсчет закончен!");
+            }
+        }, 1000);
     </script>
 
 </head>
