@@ -34,7 +34,7 @@
                 var coordX = +inputX.value;
                 var coordY = +inputY.value;
 
-                if (inputX.value == '' && inputY.value == '') {
+                if (inputX.value == '' || inputY.value == '') {
                     alert('Заполните оба поля ввода');
                     return false;
                 };
