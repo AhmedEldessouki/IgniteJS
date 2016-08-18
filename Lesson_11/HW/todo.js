@@ -20,7 +20,7 @@
         })
     }
 
-    function _updateItem(id, name, duedate, description, completed) { // функция допополнена
+    function _updateItem(id, name, duedate, description, completed) { // функция дополнена
        var arr = [];
         _data.forEach(function (e, index) {
             if (e.id == id) {
@@ -40,7 +40,7 @@
         return arr;
     }
 
-    function _updateItemId(id, value) {  // функция допополнена
+    function _updateItemId(id, value) {  // функция дополнена
         _data.forEach(function (e, index) {
             if (e.id == id + 1) {
                 _data[index].id = id;

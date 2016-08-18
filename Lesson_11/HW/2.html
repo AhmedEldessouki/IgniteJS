@@ -24,61 +24,61 @@
 
 			$scope.data = model;
 
-			var currentId = 0;
-			var form = document.getElementById('form');
-			var submit = form.querySelector('input[type="submit"]');
-			var modifyButton = document.getElementById('but1');
-			var cancelButton = document.getElementById('but2');
+			$scope.currentId = 0;
+			$scope.form = document.getElementById('form');
+			$scope.submit = form.querySelector('input[type="submit"]');
+			$scope.modifyButton = document.getElementById('but1');
+			$scope.cancelButton = document.getElementById('but2');
 
-			function addMode () {
-				submit.style.display = 'inline-block';
-				modifyButton.style.display = 'none';
-				cancelButton.style.display = 'none';
+			$scope.addMode = function () {
+				$scope.submit.style.display = 'inline-block';
+				$scope.modifyButton.style.display = 'none';
+				$scope.cancelButton.style.display = 'none';
 			}
 
-			function editMode () {
-				submit.style.display = 'none';
-				modifyButton.style.display = 'inline-block';
-				cancelButton.style.display = 'inline-block';
+			$scope.editMode = function () {
+				$scope.submit.style.display = 'none';
+				$scope.modifyButton.style.display = 'inline-block';
+				$scope.cancelButton.style.display = 'inline-block';
 			}
 
-			function getValues () {
-				$scope.taskName = form[0].value;
-				$scope.taskDueDate = form[1].value;
-				$scope.taskDescription = form[2].value;
-				$scope.taskCompleted = form[3].checked;
+			$scope.getValues = function () {
+				$scope.taskName = $scope.form[0].value;
+				$scope.taskDueDate = $scope.form[1].value;
+				$scope.taskDescription = $scope.form[2].value;
+				$scope.taskCompleted = $scope.form[3].checked;
 			}
 
-			function defaultValues () {
-				form[0].value = "";
-				form[1].value = "";
-				form[2].value = "";
-				form[3].checked = false;
+			$scope.defaultValues = function () {
+				$scope.form[0].value = "";
+				$scope.form[1].value = "";
+				$scope.form[2].value = "";
+				$scope.form[3].checked = false;
 
-				getValues();
+				$scope.getValues();
 			}
 
-			addMode();
+			$scope.addMode();
 
 			// Обработчик нажатия по кнопке
 			$scope.addItems = function () {
 				model.addItem($scope.taskName, $scope.taskDueDate, $scope.taskDescription, $scope.taskCompleted);
 				model.save();
-				defaultValues();
+				$scope.defaultValues();
 			}
 
-			$scope.modifyItem = function (id) {
-				getValues();
-				model.updateItem(currentId, $scope.taskName, $scope.taskDueDate, $scope.taskDescription, $scope.taskCompleted);
+			$scope.modifyItem = function () {
+				$scope.getValues();
+				model.updateItem($scope.currentId, $scope.taskName, $scope.taskDueDate, $scope.taskDescription, $scope.taskCompleted);
 				model.save();
 
-				defaultValues();
-				addMode();
+				$scope.defaultValues();
+				$scope.addMode();
 			}
 
 			$scope.cancelChanges = function () {
-				addMode();
-				defaultValues();
+				$scope.addMode();
+				$scope.defaultValues();
 			}
 
 			$scope.showText = function (completed) {
@@ -97,15 +97,15 @@
 				model.save();
 			}
 
-			$scope.updateItem = function () {
-				editMode();
+			$scope.updItem = function (task) {
+				$scope.editMode();
 
-				form[0].value = this.task.name || "";
-				form[1].value = this.task.duedate || "";
-				form[2].value = this.task.description || "";
-				form[3].checked = this.task.completed;
+				$scope.form[0].value = this.task.name || "";
+				$scope.form[1].value = this.task.duedate || "";
+				$scope.form[2].value = this.task.description || "";
+				$scope.form[3].checked = this.task.completed;
 
-				currentId = this.task.id;
+				$scope.currentId = this.task.id;
 				$scope.taskCompleted = this.task.completed;
 			}
 
@@ -141,7 +141,7 @@
 					</span>
 				</td>
 				<td>
-					<input type="button" class="btn btn-default" value="Edit" ng-click="updateItem()"> 
+					<input type="button" class="btn btn-default" value="Edit" ng-click="updItem(task)"> 
 					<input type="button" class="btn btn-danger" value="Delete" ng-click="removeItem(task.id)">
 				</td>
 			</tr>
