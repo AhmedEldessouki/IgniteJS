@@ -2,7 +2,7 @@
 <html lang="en" ng-app="myApp">
 <head>
     <meta charset="UTF-8">
-    <title>L14 HW T1 Var 1</title>
+    <title>L14 HW T1 Var 3</title>
 
     <link href="../Libraries/bootstrap.css" rel="stylesheet" />
     <link href="../Libraries/bootstrap-theme.css" rel="stylesheet" />
@@ -18,21 +18,27 @@
 
         var app = angular.module("myApp", []);
 
-        app.factory('calculator', function () {
+        app.provider("calculator", function () {
             return {
-                sum: function (a, b) {
-                    return a + b;
-                },
-                substract: function (a, b) {
-                    return a - b;
-                },
-                multiply: function (a, b) {
-                    return a * b;
-                },
-                divide: function (a, b) {
-                    return (a / b).toFixed(3);
+                $get: function () {
+                    return function (operation, a, b) {
+                        switch (operation) {
+                            case "sum":
+                                return a + b;
+                                break;
+                            case "substract":
+                                return a - b;
+                                break;
+                            case "multiply":
+                                return a * b;
+                                break;
+                            case "divide":
+                                return (a / b).toFixed(3);
+                                break;
+                        }
+                    };
                 }
-            }
+            };
         });
 
         app.controller("MyAppCtrl", ['$scope', 'calculator', function ($scope, calculator) {
@@ -40,26 +46,26 @@
             $scope.result = '';
 
             $scope.sum = function () {
-                $scope.result = calculator.sum(+$scope.num1, +$scope.num2);
+                $scope.result = calculator('sum', +$scope.num1, +$scope.num2);
             };
 
             $scope.substract = function () {
-                $scope.result = calculator.substract(+$scope.num1, +$scope.num2);
+                $scope.result = calculator('substract', +$scope.num1, +$scope.num2);
             };
 
             $scope.multiply = function () {
-                $scope.result = calculator.multiply(+$scope.num1, +$scope.num2);
+                $scope.result = calculator('multiply', +$scope.num1, +$scope.num2);
             };
 
             $scope.divide = function () {
-                $scope.result = calculator.divide(+$scope.num1, +$scope.num2);
+                $scope.result = calculator('divide', +$scope.num1, +$scope.num2);
             };
         }]);
     </script>
 
 </head>
 <body>
-    <p>Lesson 14 Homework Task 1 Var 1</p>
+    <p>Lesson 14 Homework Task 1 Var 3</p>
 
     <div class="container" ng-controller="MyAppCtrl">
         <h2>Калькулятор</h2> 
