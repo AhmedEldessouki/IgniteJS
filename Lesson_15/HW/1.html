@@ -9,19 +9,71 @@
     
     <style>
         body { margin: 20px; }
+        div p {margin-top: 20px; font-weight: bold; }
+        .form-control { width: auto; float: left; margin-right: 10px; }
     </style>
 
     <script src="../Libraries/angular.js"></script>
+    <script src="../Libraries/angular-cookies.js"></script>
     <script>
         // ### Задача 1
         // Разработайте сервис, которой можно будет использовать для кэширования данных. В кэш можно поместить запись и установить время удаления этой записи. Продемонстрируйте работу сервиса.
 
-        var app = angular.module("myApp", []);
+        var myApp = angular.module('myApp', []);
 
-        app.controller("MyAppCtrl", function ($scope) {
+        myApp.factory('cacheEditor', function() {
+            var expireDate = null,
+                ttl = null;
 
+            return {
+                updateData: function(scopeCache, keys) {
+                    for (var i = keys.length - 1; i >= 0; i--) {
+                        if (scopeCache.get(keys[i])[1] < new Date().getTime()) {
+                            scopeCache.remove(keys[i]);
+                            keys.splice(i, 1);
+                        }
+                    }
+                },
 
+                getData: function(scopeCache, key, value, ttl) {
+
+                    ttl = +ttl;
+                    ttl = (!isNaN(ttl)) ? ttl : 5;
+
+                    value = angular.isUndefined(value) ? null : value;
+                    expireDate = new Date(new Date().getTime() + 1000 * ttl);
+
+                    value = [value, expireDate];
+
+                    scopeCache.put(key, value);
+                }
+            }
         });
+
+        myApp.controller("MyAppCtrl", ['$scope', '$cacheFactory', 'cacheEditor', function ($scope, $cacheFactory, cacheEditor) {
+
+            $scope.keys = [];
+            $scope.cache = $cacheFactory('cacheId');
+            $scope.result = '';
+
+            $scope.put = function (key, value, ttl) {
+
+                if (angular.isDefined(key) && key.length > 0) {
+                    if (angular.isUndefined($scope.cache.get(key))) {
+                        $scope.keys.push(key);
+                    }
+
+                    cacheEditor.getData($scope.cache, key, value, ttl);
+                    $scope.update($scope.keys);
+                }
+            };
+
+            $scope.update = function (keys) {
+                if (keys.length > 0) {
+                    cacheEditor.updateData($scope.cache, keys);
+                }
+            }
+        }]);
     </script>
 
 </head>
@@ -29,7 +81,26 @@
     <p>Lesson 15 Homework Task 1</p>
 
     <div class="container" ng-controller="MyAppCtrl">
+        <input type="text" ng-model="newCacheKey" placeholder="Key" class="form-control">
+        <input type="text" ng-model="newCacheValue" placeholder="Value" class="form-control">
+        <input type="text" ng-model="newTTL" placeholder="Time to live (seconds)" class="form-control">
+
+        <button ng-click="put(newCacheKey, newCacheValue, newTTL)" class="btn btn-success">Cache</button>
+        <button ng-click="update(keys)" class="btn btn-info">Update</button>
         
+        <p ng-if="keys.length">Cached Values</p>
+        <div ng-repeat="key in keys">
+            Key: <b ng-bind="key"></b>,
+            Value: <b ng-bind="cache.get(key)[0]"></b>,
+            Expire date: <b ng-bind="cache.get(key)[1].toLocaleString()"></b>
+        </div>
+
+        <p>Cache Info</p>
+        <div ng-repeat="(key, value) in cache.info()">
+            <span ng-bind="key"></span>
+            <span>: </span>
+            <b ng-bind="value"></b>
+        </div>
     </div>
 </body>
 </html>
