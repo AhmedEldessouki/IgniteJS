@@ -64,13 +64,13 @@
                     }
 
                     cacheEditor.getData($scope.cache, key, value, ttl);
-                    $scope.update($scope.keys);
+                    $scope.update();
                 }
             };
 
-            $scope.update = function (keys) {
-                if (keys.length > 0) {
-                    cacheEditor.updateData($scope.cache, keys);
+            $scope.update = function () {
+                if ($scope.keys.length > 0) {
+                    cacheEditor.updateData($scope.cache, $scope.keys);
                 }
             }
         }]);
@@ -86,7 +86,7 @@
         <input type="text" ng-model="newTTL" placeholder="Time to live (seconds)" class="form-control">
 
         <button ng-click="put(newCacheKey, newCacheValue, newTTL)" class="btn btn-success">Cache</button>
-        <button ng-click="update(keys)" class="btn btn-info">Update</button>
+        <button ng-click="update()" class="btn btn-info">Update</button>
         
         <p ng-if="keys.length">Cached Values</p>
         <div ng-repeat="key in keys">
