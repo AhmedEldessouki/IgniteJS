@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>L16 HW T3</title>
+
+    <link href="../Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../Libraries/bootstrap-theme.css" rel="stylesheet" />
+
+    <style>
+        body { margin: 20px; }
+    </style>
+
+    <script src="../Libraries/angular.js"></script>
+    <script>
+        // ### Задача 2
+        // Добавьте на страницу следующий функционал:
+        // При клике по элементу списка на странице home, пользователь перенаправляется на страницу contact по адресу ‘/contact + routeParams’, где routeParams – параметры маршрутизации, созданные с помощью сервиса $routeParams, представляющие собой значения свойств массива people для элемента, по которому кликнул пользователь.
+        // Используйте данные, переданные через $routeParams, для автозаполнения формы на странице contact
+
+        var app = angular.module("myApp", [])
+        .controller("MyAppCtrl", function ($scope) {
+
+         
+        });
+    </script>
+</head>
+
+<body>
+    <p>Lesson 16 Homework Task 3</p>
+
+    <div class="container" ng-controller="MyAppCtrl" ng-cloak>
+       
+    </div>
+</body>
+</html>
