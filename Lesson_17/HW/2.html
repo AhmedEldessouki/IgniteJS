@@ -9,6 +9,7 @@
     
     <style>
         body { margin: 20px; }
+        div p { font-size: 18px; }
     </style>
 
     <script src="../Libraries/angular.js"></script>
@@ -19,16 +20,28 @@
 
         var myApp = angular.module('myApp', [])
         .controller('MyAppCtrl', function ($scope) {
-          
-
+            //$scope.data = [568, 312, 'middle', false];
         })
+        .directive('paragraphs', function () {
+            return {
+                restrict: "A",
+                templateUrl: 'templates/task_2.html',
+                replace: true,
+                scope: {},
+
+                link: function (scope, element, attributes) {
+                    scope.data = [132, 378, "Volga", false, 43, '88+1', 97];
+                }
+            };
+        });
     </script>
 </head>
 <body>
-    <p>Lesson 17 Homework Task 2</p>
+    <p>Lesson 17 Homework Task 1</p>
 
     <div class="container" ng-controller="MyAppCtrl">
-       
+        <h3>Параграфы из массива данных</h3>
+        <div paragraphs></div> 
     </div>
 </body>
 </html>
