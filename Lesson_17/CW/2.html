@@ -22,6 +22,12 @@
             $scope.submitHandler = function() {
                 alert('Form submited');
             };
+
+            $scope.fields = [
+                {label: "Username", placeholder: "Ваше имя", model: "username", type: "text"},
+                {label: "Login*", placeholder: "Логин", model: "login", type: "text"},
+                {label: "E-mail*", placeholder: "E-mail", model: "email", type: "email"},
+                {label: "Password*", placeholder: "Пароль", model: "password", type: "password"}];
         })
         .directive('regForm', function () {
             return {

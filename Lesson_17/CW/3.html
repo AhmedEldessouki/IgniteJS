@@ -21,7 +21,11 @@
         
         var myApp = angular.module('myApp', [])
         .controller('MyAppCtrl', function ($scope, $location) {
-
+            $scope.fields = [
+                {label: "Username", placeholder: "Ваше имя", model: "username", type: "text", pattern: "usernameRegexp"},
+                {label: "Login*", placeholder: "Логин", model: "login", type: "text", pattern: "loginRegexp"},
+                {label: "E-mail*", placeholder: "E-mail", model: "email", type: "email", pattern: "mailRegexp"},
+                {label: "Password*", placeholder: "Пароль", model: "password", type: "password", pattern: "passRegexp"}];
         })
         .directive('regForm', function () {
             return {
