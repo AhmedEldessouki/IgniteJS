@@ -9,11 +9,10 @@
     
     <style>
         body { margin: 20px; }
-        div p { font-size: 18px; }
+        .red { color: red; }
     </style>
 
     <script src="../Libraries/angular.js"></script>
-    <script src="../Libraries/angular_route.js"></script>
     <script>
         // ### Задача 2
         // Создайте две директивы. Первая создает список ul с произвольным количеством элементов. Вторая директива добавляет четным элементам списка CSS класс ‘red’ со следующим значением:
@@ -22,12 +21,52 @@
         // }
         // Обе директивы используются в качестве атрибутов и применяются к одному и тому же элементу. При решении задачи используйте приоритет директив.
 
+        var model = (function () {
+            var arr = [];
+            var items = 20;
+
+            for (var i = 1; i <= items; i++) {
+                arr.push('Item ' + i);
+            }
+
+            return arr;
+        })();
+
         var myApp = angular.module('myApp', [])
-        .controller('MyAppCtrl', function ($scope) {
-
+        .controller('menuCtrl', function ($scope) {
+            $scope.data = model;
         })
-        .directive('customDirective', function () {
+        .directive('listDir', function(){
+            return {
+                restrict: 'A',
+                priority: 10,
+                controller: 'menuCtrl',
+                link: function (scope, elem, attr) {
+                    var ul = angular.element("<ul>");
 
+                    for (var i = 0; i < scope.data.length; i++) {
+                        var li = angular.element("<li>").text(scope.data[i]);
+                        ul.append(li);
+                    }
+
+                    elem.append(ul);
+                }
+            };
+        })
+        .directive('styleDir', function () {
+            return {
+                restrict: 'A',
+                priority: 15,
+                link: function (scope, elem, attrs) {
+                    var li_items = angular.element(document).find("li");
+
+                    for (var i = 0; i < li_items.length; i++) {
+                        if (i %2 != 0){
+                            li_items[i].setAttribute("class","red");
+                        }
+                    }
+                }
+            };
         });
     </script>
 </head>
@@ -35,8 +74,9 @@
     <p>Lesson 18 Homework Task 2</p>
 
     <div class="container">
-        <div class="panel well">
-            <div custom-directive></div>
+        <h3>Список</h3>
+        <div class="panel well" ng-controller="menuCtrl">
+            <div list-dir style-dir></div>
         </div>
     </div>
 </body>
