@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>L18 HW T2</title>
+
+    <link href="../Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../Libraries/bootstrap-theme.css" rel="stylesheet" />
+    
+    <style>
+        body { margin: 20px; }
+        div p { font-size: 18px; }
+    </style>
+
+    <script src="../Libraries/angular.js"></script>
+    <script src="../Libraries/angular_route.js"></script>
+    <script>
+        // ### Задача 2
+        // Создайте две директивы. Первая создает список ul с произвольным количеством элементов. Вторая директива добавляет четным элементам списка CSS класс ‘red’ со следующим значением:
+        // .red {
+        //     color: red
+        // }
+        // Обе директивы используются в качестве атрибутов и применяются к одному и тому же элементу. При решении задачи используйте приоритет директив.
+
+        var myApp = angular.module('myApp', [])
+        .controller('MyAppCtrl', function ($scope) {
+
+        })
+        .directive('customDirective', function () {
+
+        });
+    </script>
+</head>
+<body>
+    <p>Lesson 18 Homework Task 2</p>
+
+    <div class="container">
+        <div class="panel well">
+            <div custom-directive></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>L18 HW T3</title>
+
+    <link href="../Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../Libraries/bootstrap-theme.css" rel="stylesheet" />
+    
+    <style>
+        body { margin: 20px; }
+        .navbar { display: inline-block; padding: 5px 10px; background-color: #ccc;}
+    </style>
+
+    <script src="../Libraries/angular.js"></script>
+    <script src="../Libraries/angular_route.js"></script>
+    <script>
+        // ### Задача 3
+        // Создайте директиву dialogBox, которая будет выводить на экран в диалоговом окне содержимое элемента, к которому привязана директива.
+
+        var myApp = angular.module('myApp', [])
+        .controller('MyAppCtrl', function ($scope) {
+
+        })
+        .directive('customDirective', function () {
+           
+        });
+    </script>
+</head>
+<body>
+    <p>Lesson 18 Homework Task 3</p>
+
+    <div class="container">
+        <div class="panel well">
+            <div custom-directive></div>
+        </div>
+    </div>
+</body>
+</html>
