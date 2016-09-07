@@ -125,35 +125,10 @@
 
 	        var tempArr = this.props.users.slice(0, this.props.value);
 
-	        if (!this.props.checked) {
-	            return React.createElement(
-	                'div',
-	                null,
-	                React.createElement(
-	                    'ul',
-	                    { style: { "color": this.state.color } },
-	                    tempArr.map(function (user, item) {
-	                        return React.createElement(
-	                            'li',
-	                            { key: item },
-	                            React.createElement(
-	                                'span',
-	                                null,
-	                                user.name
-	                            ),
-	                            ' ',
-	                            React.createElement(
-	                                'span',
-	                                null,
-	                                user.gender,
-	                                ';'
-	                            )
-	                        );
-	                    })
-	                )
-	            );
-	        } else {
-	            return React.createElement(
+	        return React.createElement(
+	            'div',
+	            null,
+	            this.props.checked ? React.createElement(
 	                'table',
 	                { className: 'table table-bordered table-hover' },
 	                React.createElement(
@@ -194,8 +169,29 @@
 	                        );
 	                    })
 	                )
-	            );
-	        }
+	            ) : React.createElement(
+	                'ul',
+	                { style: { "color": this.state.color } },
+	                tempArr.map(function (user, item) {
+	                    return React.createElement(
+	                        'li',
+	                        { key: item },
+	                        React.createElement(
+	                            'span',
+	                            null,
+	                            user.name
+	                        ),
+	                        ' ',
+	                        React.createElement(
+	                            'span',
+	                            null,
+	                            user.gender,
+	                            ';'
+	                        )
+	                    );
+	                })
+	            )
+	        );
 	    }
 	});
 

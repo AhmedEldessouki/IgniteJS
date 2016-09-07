@@ -79,33 +79,30 @@ var ResultItem = React.createClass({
 
         var tempArr =  this.props.users.slice(0, this.props.value);
 
-        if (!this.props.checked) {
-            return (
-                <div>
-                    <ul style={{"color": this.state.color}}>
+        return (
+            <div>
+                {this.props.checked ?
+                    <table className="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Gender</th>
+                            </tr>
+                        </thead>
+                        <tbody style={{"color": this.state.color}}>
+                            {tempArr.map(function(user, item) {
+                                return <tr key={item}><td>{user.name}</td><td>{user.gender}</td></tr>;
+                            })}
+                        </tbody>
+                    </table>
+                :   <ul style={{"color": this.state.color}}>
                         {tempArr.map(function(user, item) {
                             return <li key={item}><span>{user.name}</span> <span>{user.gender};</span></li>;
                         })}
                     </ul>
-                </div>
-             );
-        } else {
-            return (
-                <table className="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Gender</th>
-                        </tr>
-                    </thead>
-                    <tbody style={{"color": this.state.color}}>
-                        {tempArr.map(function(user, item) {
-                            return <tr key={item}><td>{user.name}</td><td>{user.gender}</td></tr>;
-                        })}
-                    </tbody>
-                </table>
-            );
-        }        
+                }
+            </div>
+        );
     }
 });
 
