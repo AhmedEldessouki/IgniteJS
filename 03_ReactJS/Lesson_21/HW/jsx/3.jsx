@@ -9,7 +9,7 @@ var Form = React.createClass({
             formValid: false,
             nameValid: false,
             mailValid: false,
-            phoneValid: false,
+            phoneValid: true,
             messageValid: false
         };
     },

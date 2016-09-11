@@ -56,7 +56,7 @@
 	            formValid: false,
 	            nameValid: false,
 	            mailValid: false,
-	            phoneValid: false,
+	            phoneValid: true,
 	            messageValid: false
 	        };
 	    },
