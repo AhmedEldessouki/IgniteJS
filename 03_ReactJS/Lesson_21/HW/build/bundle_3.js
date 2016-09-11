@@ -47,161 +47,134 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 
-	var ResultList = React.createClass({
-	    displayName: 'ResultList',
+	var Form = React.createClass({
+	    displayName: 'Form',
 
-
-	    getDefaultProps: function () {
-	        return {
-	            users: [{ name: "Anne Montgomery", gender: "Female" }, { name: "Annie George", gender: "Female" }, { name: "Gary Butler", gender: "Male" }, { name: "Lisa Mendoza", gender: "Female" }, { name: "Marilyn Henry", gender: "Female" }, { name: "Johnny Tucker", gender: "Male" }, { name: "Chris Jacobs", gender: "Male" }, { name: "Benjamin James", gender: "Male" }]
-	        };
-	    },
 
 	    getInitialState: function () {
 	        return {
-	            inputVal: +'8',
-	            checked: false
+	            formValid: false,
+	            nameValid: false,
+	            mailValid: false,
+	            phoneValid: false,
+	            messageValid: false
 	        };
 	    },
 
-	    handleInputValChange: function (e) {
-	        var value = +e.target.value;
+	    errorMessage: {
+	        name: 'Allowed english alphabet characters only',
+	        mail: 'Allowed english alphabet characters, digits, symbols _ and @',
+	        phone: 'Phone format: +xxxxxxxxxx',
+	        message: 'Message must be at least 10 characters'
+	    },
 
-	        if (value >= 1 && !isNaN(value)) {
-	            this.setState({ inputVal: value });
+	    regExp: {
+	        name: /^[a-zA-Z_]{3,20}$/,
+	        mail: /^\w+@[a-zA-Z_]+?\.[a-zA-Z]+$/,
+	        phone: /^\+?[0-9]{12}$/,
+	        message: /^.{10,100}$/
+	    },
+
+	    inputHandler: function (e) {
+	        var testVal = this.regExp[e.target.dataset.pattern];
+	        var currentValue = e.target.value;
+	        var classes = e.target.classList;
+
+	        if (currentValue.search(testVal) == -1) {
+	            classes.remove('valid');
+	            classes.add('invalid');
+	            this.setState({ [e.target.dataset.pattern + 'Valid']: false });
 	        } else {
-	            this.setState({ inputVal: this.props.users.length });
+	            classes.remove('invalid');
+	            classes.add('valid');
+	            this.setState({ [e.target.dataset.pattern + 'Valid']: true });
+	        }
+
+	        setTimeout(this.formChecker, 0);
+	    },
+
+	    formChecker: function () {
+	        if (this.state.nameValid && this.state.mailValid && this.state.phoneValid && this.state.messageValid) {
+	            this.setState({ formValid: true });
+	        } else {
+	            this.setState({ formValid: false });
 	        }
 	    },
 
-	    handler: function () {
-	        this.setState({ checked: !this.state.checked });
+	    submitHandler: function (e) {
+	        alert('Form submited');
 	    },
 
 	    render: function () {
 	        return React.createElement(
-	            'div',
-	            null,
+	            'form',
+	            { name: 'form', action: '#', onSubmit: this.submitHandler },
+	            React.createElement(Input, { type: 'text', placeholder: 'Имя', label: 'Name*', handler: this.inputHandler, pattern: 'name', valid: this.state.nameValid, errorMessage: this.errorMessage.name, required: true }),
+	            React.createElement(Input, { type: 'email', placeholder: 'E-mail', label: 'E-mail*', handler: this.inputHandler, pattern: 'mail', valid: this.state.mailValid, errorMessage: this.errorMessage.mail, required: true }),
+	            React.createElement(Input, { type: 'tel', placeholder: 'Телефон', label: 'Phone number', handler: this.inputHandler, pattern: 'phone', valid: this.state.phoneValid, errorMessage: this.errorMessage.phone }),
+	            React.createElement(Message, { placeholder: 'Сообщение', label: 'Message*', handler: this.inputHandler, pattern: 'message', valid: this.state.messageValid, errorMessage: this.errorMessage.message, required: true }),
 	            React.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                React.createElement('input', { type: 'text', name: 'numbers', onChange: this.handleInputValChange, className: 'input-lg form-control', placeholder: 'Введите количество элементов' })
-	            ),
-	            React.createElement(
-	                'label',
+	                'p',
 	                null,
-	                React.createElement('input', { type: 'checkbox', onChange: this.handler }),
-	                ' Вид "Таблица"'
+	                '* - ',
+	                React.createElement(
+	                    'b',
+	                    null,
+	                    'required fields'
+	                )
 	            ),
-	            React.createElement(ResultItem, { users: this.props.users, value: this.state.inputVal, checked: this.state.checked })
+	            React.createElement('input', { type: 'submit', className: 'btn btn-primary btn-lg', value: 'Submit', disabled: !this.state.formValid })
 	        );
 	    }
 	});
 
-	var ResultItem = React.createClass({
-	    displayName: 'ResultItem',
-
-
-	    getInitialState: function () {
-	        return {
-	            color: '#000'
-	        };
-	    },
-
-	    componentWillReceiveProps: function () {
-
-	        function getRandomColor() {
-	            var h = Math.floor(Math.random() * (255 - 1) + 1);
-	            var s = Math.floor(Math.random() * (100 - 1) + 1) + '%';
-	            var l = '50%';
-	            var randomColor = 'hsl(' + h + ',' + s + ',' + l + ')';
-	            return randomColor;
-	        };
-
-	        this.setState({ color: getRandomColor() });
-	    },
+	var Input = React.createClass({
+	    displayName: 'Input',
 
 	    render: function () {
-
-	        var tempArr = this.props.users.slice(0, this.props.value);
-
 	        return React.createElement(
 	            'div',
-	            null,
-	            this.props.checked ? React.createElement(
-	                'table',
-	                { className: 'table table-bordered table-hover' },
-	                React.createElement(
-	                    'thead',
-	                    null,
-	                    React.createElement(
-	                        'tr',
-	                        null,
-	                        React.createElement(
-	                            'th',
-	                            null,
-	                            'Name'
-	                        ),
-	                        React.createElement(
-	                            'th',
-	                            null,
-	                            'Gender'
-	                        )
-	                    )
-	                ),
-	                React.createElement(
-	                    'tbody',
-	                    { style: { "color": this.state.color } },
-	                    tempArr.map(function (user, item) {
-	                        return React.createElement(
-	                            'tr',
-	                            { key: item },
-	                            React.createElement(
-	                                'td',
-	                                null,
-	                                user.name
-	                            ),
-	                            React.createElement(
-	                                'td',
-	                                null,
-	                                user.gender
-	                            )
-	                        );
-	                    })
-	                )
-	            ) : React.createElement(
-	                'ul',
-	                { style: { "color": this.state.color } },
-	                tempArr.map(function (user, item) {
-	                    return React.createElement(
-	                        'li',
-	                        { key: item },
-	                        React.createElement(
-	                            'span',
-	                            null,
-	                            user.name
-	                        ),
-	                        ' ',
-	                        React.createElement(
-	                            'span',
-	                            null,
-	                            user.gender,
-	                            ';'
-	                        )
-	                    );
-	                })
-	            )
+	            { className: 'form-group' },
+	            React.createElement(
+	                'label',
+	                null,
+	                this.props.label
+	            ),
+	            React.createElement('input', { type: this.props.type, placeholder: this.props.placeholder, onInput: this.props.handler, name: this.props.pattern, 'data-pattern': this.props.pattern, required: this.props.required, className: 'input-lg form-control' }),
+	            !this.props.valid ? React.createElement(
+	                'span',
+	                { className: 'warning-text' },
+	                this.props.errorMessage
+	            ) : ''
+	        );
+	    }
+	});
+
+	var Message = React.createClass({
+	    displayName: 'Message',
+
+	    render: function () {
+	        return React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	                'label',
+	                null,
+	                this.props.label
+	            ),
+	            React.createElement('textarea', { placeholder: this.props.placeholder, onInput: this.props.handler, name: this.props.pattern, 'data-pattern': this.props.pattern, required: this.props.required, className: 'input-lg form-control' }),
+	            !this.props.valid ? React.createElement(
+	                'span',
+	                { className: 'warning-text' },
+	                this.props.errorMessage
+	            ) : ''
 	        );
 	    }
 	});
 
 	var container = document.getElementById('task');
 
-	ReactDOM.render(React.createElement(
-	    ResultList,
-	    null,
-	    React.createElement(ResultItem, null)
-	), container);
+	ReactDOM.render(React.createElement(Form, null), container);
 
 /***/ },
 /* 1 */

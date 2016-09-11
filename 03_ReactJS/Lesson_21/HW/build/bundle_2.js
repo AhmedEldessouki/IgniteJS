@@ -47,29 +47,61 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 
-	var ResultList = React.createClass({
-	    displayName: 'ResultList',
+	var Calculator = React.createClass({
+	    displayName: 'Calculator',
 
-
-	    getDefaultProps: function () {
-	        return {
-	            users: [{ name: "Anne Montgomery", gender: "Female" }, { name: "Annie George", gender: "Female" }, { name: "Gary Butler", gender: "Male" }, { name: "Lisa Mendoza", gender: "Female" }, { name: "Marilyn Henry", gender: "Female" }, { name: "Johnny Tucker", gender: "Male" }, { name: "Chris Jacobs", gender: "Male" }, { name: "Benjamin James", gender: "Male" }]
-	        };
-	    },
 
 	    getInitialState: function () {
 	        return {
-	            inputVal: +'8'
+	            num1: '',
+	            num2: '',
+	            result: ''
 	        };
 	    },
 
-	    handleInputValChange: function (e) {
-	        var value = +e.target.value;
+	    num1Handler: function (e) {
+	        var previousValue = this.state.num1;
+	        var currentValue = e.target.value;
+	        var testVal = /^[0-9]*$/;
 
-	        if (value >= 1 && !isNaN(value)) {
-	            this.setState({ inputVal: value });
+	        if (currentValue.search(testVal) == -1) {
+	            e.target.value = previousValue;
+	            return;
+	        }
+
+	        this.setState({ num1: e.target.value });
+	    },
+
+	    num2Handler: function (e) {
+	        var previousValue = this.state.num2;
+	        var currentValue = e.target.value;
+	        var testVal = /^[0-9]*$/;
+
+	        if (currentValue.search(testVal) == -1) {
+	            e.target.value = previousValue;
+	            return;
+	        }
+
+	        this.setState({ num2: e.target.value });
+	    },
+
+	    sumHandler: function () {
+	        this.setState({ result: +this.state.num1 + +this.state.num2 });
+	    },
+
+	    substractHandler: function () {
+	        this.setState({ result: +this.state.num1 - +this.state.num2 });
+	    },
+
+	    multiplyHandler: function () {
+	        this.setState({ result: +this.state.num1 * +this.state.num2 });
+	    },
+
+	    divideHandler: function () {
+	        if (+this.state.num2 !== 0) {
+	            this.setState({ result: (+this.state.num1 / +this.state.num2).toFixed(3) });
 	        } else {
-	            this.setState({ inputVal: this.props.users.length });
+	            this.setState({ result: "деление на 0" });
 	        }
 	    },
 
@@ -78,74 +110,39 @@
 	            'div',
 	            null,
 	            React.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                React.createElement('input', { type: 'text', name: 'numbers', onChange: this.handleInputValChange, className: 'input-lg form-control', placeholder: 'Введите количество элементов' })
+	                'h2',
+	                null,
+	                'Калькулятор'
 	            ),
-	            React.createElement(ResultItem, { users: this.props.users, value: this.state.inputVal })
-	        );
-	    }
-	});
-
-	var ResultItem = React.createClass({
-	    displayName: 'ResultItem',
-
-
-	    getInitialState: function () {
-	        return {
-	            color: '#000'
-	        };
-	    },
-
-	    componentWillReceiveProps: function () {
-
-	        function getRandomColor() {
-	            var h = Math.floor(Math.random() * (255 - 1) + 1);
-	            var s = Math.floor(Math.random() * (100 - 1) + 1) + '%';
-	            var l = '50%';
-	            var randomColor = 'hsl(' + h + ',' + s + ',' + l + ')';
-	            return randomColor;
-	        };
-
-	        this.setState({ color: getRandomColor() });
-	    },
-
-	    render: function () {
-
-	        var tempArr = this.props.users.slice(0, this.props.value);
-
-	        return React.createElement(
-	            'ul',
-	            { style: { "color": this.state.color } },
-	            tempArr.map(function (user, item) {
-	                return React.createElement(
-	                    'li',
-	                    { key: item },
-	                    React.createElement(
-	                        'span',
-	                        null,
-	                        user.name
-	                    ),
-	                    ' ',
-	                    React.createElement(
-	                        'span',
-	                        null,
-	                        user.gender,
-	                        ';'
-	                    )
-	                );
-	            })
+	            React.createElement(
+	                'div',
+	                null,
+	                React.createElement('input', { type: 'text', className: 'text-right', onChange: this.num1Handler }),
+	                React.createElement('input', { type: 'text', className: 'text-right', onChange: this.num2Handler }),
+	                React.createElement('br', null),
+	                React.createElement('br', null),
+	                React.createElement('input', { type: 'button', value: '+', className: 'btn btn-default', onClick: this.sumHandler }),
+	                React.createElement('input', { type: 'button', value: '-', className: 'btn btn-default', onClick: this.substractHandler }),
+	                React.createElement('input', { type: 'button', value: '*', className: 'btn btn-default', onClick: this.multiplyHandler }),
+	                React.createElement('input', { type: 'button', value: '/', className: 'btn btn-default', onClick: this.divideHandler }),
+	                ' ',
+	                React.createElement('br', null),
+	                React.createElement('br', null),
+	                React.createElement(
+	                    'h4',
+	                    null,
+	                    'Результат: ',
+	                    this.state.result
+	                ),
+	                React.createElement('br', null)
+	            )
 	        );
 	    }
 	});
 
 	var container = document.getElementById('task');
 
-	ReactDOM.render(React.createElement(
-	    ResultList,
-	    null,
-	    React.createElement(ResultItem, null)
-	), container);
+	ReactDOM.render(React.createElement(Calculator, null), container);
 
 /***/ },
 /* 1 */

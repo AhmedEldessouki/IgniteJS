@@ -2,69 +2,39 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 
-var ResultList = React.createClass({
-            
-    getDefaultProps: function() {
-        return {
-            users: [
-                {name:"Anne Montgomery",gender:"Female"},
-                {name:"Annie George",gender:"Female"},
-                {name:"Gary Butler",gender:"Male"},
-                {name:"Lisa Mendoza",gender:"Female"},
-                {name:"Marilyn Henry",gender:"Female"},
-                {name:"Johnny Tucker",gender:"Male"},
-                {name:"Chris Jacobs",gender:"Male"},
-                {name:"Benjamin James",gender:"Male"}]
-        };
-    },
+
+var Counter = React.createClass({
 
     getInitialState: function() {
         return {
-            inputVal: +'8'  
+            count: 3
         };
-    },  
-
-    handleInputValChange: function(e) {
-        var value = +e.target.value;
-
-        if (value >= 1 && !isNaN(value)) {
-            this.setState({inputVal: value});
-        } else {
-            this.setState({inputVal: this.props.users.length});
-        }
     },
 
-    render: function() {
+    plusHandler: function() {
+        this.setState({count: this.state.count + 1});
+    },
+
+    minusHandler: function() {
+        if (this.state.count == 0) return;
+
+        this.setState({count: this.state.count - 1});
+    },
+
+    render: function () {
         return (
             <div>
-                <div className="form-group">
-                    <input type="text" name='numbers' onChange={this.handleInputValChange} className="input-lg form-control" placeholder="Введите количество элементов" />
-                </div>
+                <h3>Счет: {this.state.count}</h3>
 
-                <ResultItem users={this.props.users} value={this.state.inputVal} />
+                <button className="btn btn-default" onClick={this.minusHandler}>-</button>
+                <button className="btn btn-success" onClick={this.plusHandler}>+</button>
             </div>
         );
     }
 });
 
-var ResultItem = React.createClass({
-
-    render: function() {
-
-        var tempArr =  this.props.users.slice(0, this.props.value);
-
-        return (
-             <ul>
-                {tempArr.map(function(user, item) {
-                    return <li key={item}><span>{user.name}</span> <span>{user.gender};</span></li>;
-                })}
-            </ul>
-        );
-    }
-});
 
 
+var container = document.getElementById('task');
 
-var container = document.getElementById('task'); 
-
-ReactDOM.render(<ResultList><ResultItem /></ResultList>, container); 
+ReactDOM.render(<Counter />, container); 

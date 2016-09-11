@@ -2,88 +2,85 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 
-var ResultList = React.createClass({
-            
-    getDefaultProps: function() {
-        return {
-            users: [
-                {name:"Anne Montgomery",gender:"Female"},
-                {name:"Annie George",gender:"Female"},
-                {name:"Gary Butler",gender:"Male"},
-                {name:"Lisa Mendoza",gender:"Female"},
-                {name:"Marilyn Henry",gender:"Female"},
-                {name:"Johnny Tucker",gender:"Male"},
-                {name:"Chris Jacobs",gender:"Male"},
-                {name:"Benjamin James",gender:"Male"}]
-        };
-    },
+var Calculator = React.createClass({
 
     getInitialState: function() {
         return {
-            inputVal: +'8'  
+            num1: '',
+            num2: '',
+            result: ''
         };
-    },  
+    },
 
-    handleInputValChange: function(e) {
-        var value = +e.target.value;
+    num1Handler: function (e) {
+        var previousValue = this.state.num1;
+        var currentValue = e.target.value;
+        var testVal = /^[0-9]*$/;
 
-        if (value >= 1 && !isNaN(value)) {
-            this.setState({inputVal: value});
+        if (currentValue.search(testVal) == -1) {
+        	e.target.value = previousValue;
+        	return;
+        } 
+
+        this.setState({num1: e.target.value});
+    },
+
+    num2Handler: function (e) {
+        var previousValue = this.state.num2;
+        var currentValue = e.target.value;
+        var testVal = /^[0-9]*$/;
+
+        if (currentValue.search(testVal) == -1) {
+        	e.target.value = previousValue;
+        	return;
+        }
+
+        this.setState({num2: e.target.value});
+    },
+
+    sumHandler: function () {
+        this.setState({result: +this.state.num1 + +this.state.num2});
+    },
+
+    substractHandler: function () {
+        this.setState({result: +this.state.num1 - +this.state.num2});
+    },
+
+    multiplyHandler: function () {
+        this.setState({result: +this.state.num1 * +this.state.num2});
+    },
+
+    divideHandler: function () {
+        if (+this.state.num2 !== 0) {
+            this.setState({result: (+this.state.num1 / +this.state.num2).toFixed(3)});
         } else {
-            this.setState({inputVal: this.props.users.length});
+            this.setState({result: "деление на 0"});
         }
     },
 
-    render: function() {
+    render: function () {
         return (
             <div>
-                <div className="form-group">
-                    <input type="text" name='numbers' onChange={this.handleInputValChange} className="input-lg form-control" placeholder="Введите количество элементов" />
-                </div>
+                <h2>Калькулятор</h2> 
 
-                <ResultItem users={this.props.users} value={this.state.inputVal} />
+                <div>
+                    <input type="text" className="text-right" onChange={this.num1Handler} />
+                    <input type="text" className="text-right" onChange={this.num2Handler} /><br/><br/>
+
+                    <input type="button" value="+" className="btn btn-default" onClick={this.sumHandler} /> 
+                    <input type="button" value="-" className="btn btn-default" onClick={this.substractHandler} />
+                    <input type="button" value="*" className="btn btn-default" onClick={this.multiplyHandler} /> 
+                    <input type="button" value="/" className="btn btn-default" onClick={this.divideHandler} /> <br/><br/>
+
+                    <h4>Результат: {this.state.result}</h4><br/>
+                </div>
             </div>
         );
     }
 });
 
-var ResultItem = React.createClass({
-
-    getInitialState: function() {
-        return {
-            color: '#000'       
-        };
-    },  
-
-    componentWillReceiveProps: function() {
-
-        function getRandomColor() {
-            var h = Math.floor(Math.random() * (255 - 1) + 1); 
-            var s = Math.floor(Math.random() * (100 - 1) + 1) + '%'; 
-            var l = '50%'; 
-            var randomColor = 'hsl(' + h + ',' + s + ',' + l + ')';
-            return randomColor;
-        };
-
-        this.setState({color: getRandomColor()});
-    }, 
-
-    render: function() {
-
-        var tempArr =  this.props.users.slice(0, this.props.value);
-
-        return (
-             <ul style={{"color": this.state.color}}>
-                {tempArr.map(function(user, item) {
-                    return <li key={item}><span>{user.name}</span> <span>{user.gender};</span></li>;
-                })}
-            </ul>
-        );
-    }
-});
 
 
+var container = document.getElementById('task');
 
-var container = document.getElementById('task'); 
-
-ReactDOM.render(<ResultList><ResultItem /></ResultList>, container); 
+ReactDOM.render(<Calculator />, container); 

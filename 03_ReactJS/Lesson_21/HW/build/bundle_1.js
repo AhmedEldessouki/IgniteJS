@@ -47,30 +47,24 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 
-	var ResultList = React.createClass({
-	    displayName: 'ResultList',
+	var Counter = React.createClass({
+	    displayName: 'Counter',
 
-
-	    getDefaultProps: function () {
-	        return {
-	            users: [{ name: "Anne Montgomery", gender: "Female" }, { name: "Annie George", gender: "Female" }, { name: "Gary Butler", gender: "Male" }, { name: "Lisa Mendoza", gender: "Female" }, { name: "Marilyn Henry", gender: "Female" }, { name: "Johnny Tucker", gender: "Male" }, { name: "Chris Jacobs", gender: "Male" }, { name: "Benjamin James", gender: "Male" }]
-	        };
-	    },
 
 	    getInitialState: function () {
 	        return {
-	            inputVal: +'8'
+	            count: 3
 	        };
 	    },
 
-	    handleInputValChange: function (e) {
-	        var value = +e.target.value;
+	    plusHandler: function () {
+	        this.setState({ count: this.state.count + 1 });
+	    },
 
-	        if (value >= 1 && !isNaN(value)) {
-	            this.setState({ inputVal: value });
-	        } else {
-	            this.setState({ inputVal: this.props.users.length });
-	        }
+	    minusHandler: function () {
+	        if (this.state.count == 0) return;
+
+	        this.setState({ count: this.state.count - 1 });
 	    },
 
 	    render: function () {
@@ -78,55 +72,28 @@
 	            'div',
 	            null,
 	            React.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                React.createElement('input', { type: 'text', name: 'numbers', onChange: this.handleInputValChange, className: 'input-lg form-control', placeholder: 'Введите количество элементов' })
+	                'h3',
+	                null,
+	                'Счет: ',
+	                this.state.count
 	            ),
-	            React.createElement(ResultItem, { users: this.props.users, value: this.state.inputVal })
-	        );
-	    }
-	});
-
-	var ResultItem = React.createClass({
-	    displayName: 'ResultItem',
-
-
-	    render: function () {
-
-	        var tempArr = this.props.users.slice(0, this.props.value);
-
-	        return React.createElement(
-	            'ul',
-	            null,
-	            tempArr.map(function (user, item) {
-	                return React.createElement(
-	                    'li',
-	                    { key: item },
-	                    React.createElement(
-	                        'span',
-	                        null,
-	                        user.name
-	                    ),
-	                    ' ',
-	                    React.createElement(
-	                        'span',
-	                        null,
-	                        user.gender,
-	                        ';'
-	                    )
-	                );
-	            })
+	            React.createElement(
+	                'button',
+	                { className: 'btn btn-default', onClick: this.minusHandler },
+	                '-'
+	            ),
+	            React.createElement(
+	                'button',
+	                { className: 'btn btn-success', onClick: this.plusHandler },
+	                '+'
+	            )
 	        );
 	    }
 	});
 
 	var container = document.getElementById('task');
 
-	ReactDOM.render(React.createElement(
-	    ResultList,
-	    null,
-	    React.createElement(ResultItem, null)
-	), container);
+	ReactDOM.render(React.createElement(Counter, null), container);
 
 /***/ },
 /* 1 */

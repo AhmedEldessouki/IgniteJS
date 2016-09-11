@@ -2,105 +2,102 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 
-var ResultList = React.createClass({
-            
-    getDefaultProps: function() {
-        return {
-            users: [
-                {name:"Anne Montgomery",gender:"Female"},
-                {name:"Annie George",gender:"Female"},
-                {name:"Gary Butler",gender:"Male"},
-                {name:"Lisa Mendoza",gender:"Female"},
-                {name:"Marilyn Henry",gender:"Female"},
-                {name:"Johnny Tucker",gender:"Male"},
-                {name:"Chris Jacobs",gender:"Male"},
-                {name:"Benjamin James",gender:"Male"}]
-        };
-    },
+var Form = React.createClass({
 
     getInitialState: function() {
         return {
-            inputVal: +'8',
-            checked: false
+            formValid: false,
+            nameValid: false,
+            mailValid: false,
+            phoneValid: false,
+            messageValid: false
         };
-    },  
+    },
 
-    handleInputValChange: function(e) {
-        var value = +e.target.value;
+    errorMessage: {
+        name: 'Allowed english alphabet characters only',
+        mail: 'Allowed english alphabet characters, digits, symbols _ and @',
+        phone: 'Phone format: +xxxxxxxxxx',
+        message: 'Message must be at least 10 characters'
+    },
 
-        if (value >= 1 && !isNaN(value)) {
-            this.setState({inputVal: value});
+    regExp: {
+        name: /^[a-zA-Z_]{3,20}$/,
+        mail:  /^\w+@[a-zA-Z_]+?\.[a-zA-Z]+$/,
+        phone: /^\+?[0-9]{12}$/,
+        message: /^.{10,100}$/
+    },
+
+    inputHandler: function (e) {
+        var testVal = this.regExp[e.target.dataset.pattern];
+        var currentValue = e.target.value;
+        var classes = e.target.classList;
+
+        if (currentValue.search(testVal) == -1) {
+            classes.remove('valid');
+            classes.add('invalid');
+            this.setState({[e.target.dataset.pattern + 'Valid']: false});
         } else {
-            this.setState({inputVal: this.props.users.length});
+            classes.remove('invalid');
+            classes.add('valid');
+            this.setState({[e.target.dataset.pattern + 'Valid']: true});
+        }
+
+        setTimeout(this.formChecker, 0);
+    },
+
+    formChecker: function () {
+        if (this.state.nameValid && this.state.mailValid && this.state.phoneValid && this.state.messageValid) {
+            this.setState({formValid: true});
+        } else {
+            this.setState({formValid: false});
         }
     },
 
-    handler: function () {
-        this.setState({checked: !this.state.checked});
+    submitHandler: function (e) {
+        alert('Form submited');
     },
 
-    render: function() {
+    render: function () {
         return (
-            <div>
-                <div className="form-group">
-                    <input type="text" name='numbers' onChange={this.handleInputValChange} className="input-lg form-control" placeholder="Введите количество элементов" />
-                </div>
+            <form name="form" action="#" onSubmit={this.submitHandler}>
+                <Input type="text" placeholder="Имя" label="Name*" handler={this.inputHandler} pattern="name" valid={this.state.nameValid} errorMessage={this.errorMessage.name} required  />
+                
+                <Input type="email" placeholder="E-mail" label="E-mail*" handler={this.inputHandler} pattern="mail" valid={this.state.mailValid} errorMessage={this.errorMessage.mail} required />
+                
+                <Input type="tel" placeholder="Телефон" label="Phone number" handler={this.inputHandler} pattern="phone" valid={this.state.phoneValid} errorMessage={this.errorMessage.phone} />
 
-                <label><input type="checkbox" onChange={this.handler} /> Вид "Таблица"</label>
+                <Message placeholder="Сообщение" label="Message*" handler={this.inputHandler} pattern="message" valid={this.state.messageValid} errorMessage={this.errorMessage.message} required />
 
-                <ResultItem users={this.props.users} value={this.state.inputVal} checked={this.state.checked} />
+                <p>* - <b>required fields</b></p>
+
+                <input type="submit" className="btn btn-primary btn-lg" value="Submit" disabled={!this.state.formValid} />
+            </form>
+        );
+    }
+});
+
+var Input = React.createClass({
+    render: function () {
+        return (
+            <div className="form-group">
+                <label>{this.props.label}</label>
+                <input type={this.props.type} placeholder={this.props.placeholder} onInput={this.props.handler} name={this.props.pattern} data-pattern={this.props.pattern} required={this.props.required} className="input-lg form-control" />
+
+                {!this.props.valid ? <span className="warning-text">{this.props.errorMessage}</span> : ''}
             </div>
         );
     }
 });
 
-var ResultItem = React.createClass({
-
-    getInitialState: function() {
-        return {
-            color: '#000'       
-        };
-    },  
-
-    componentWillReceiveProps: function() {
-
-        function getRandomColor() {
-            var h = Math.floor(Math.random() * (255 - 1) + 1); 
-            var s = Math.floor(Math.random() * (100 - 1) + 1) + '%'; 
-            var l = '50%'; 
-            var randomColor = 'hsl(' + h + ',' + s + ',' + l + ')';
-            return randomColor;
-        };
-
-        this.setState({color: getRandomColor()});
-    }, 
-
-    render: function() {
-
-        var tempArr =  this.props.users.slice(0, this.props.value);
-
+var Message = React.createClass({
+    render: function () {
         return (
-            <div>
-                {this.props.checked ?
-                    <table className="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Gender</th>
-                            </tr>
-                        </thead>
-                        <tbody style={{"color": this.state.color}}>
-                            {tempArr.map(function(user, item) {
-                                return <tr key={item}><td>{user.name}</td><td>{user.gender}</td></tr>;
-                            })}
-                        </tbody>
-                    </table>
-                :   <ul style={{"color": this.state.color}}>
-                        {tempArr.map(function(user, item) {
-                            return <li key={item}><span>{user.name}</span> <span>{user.gender};</span></li>;
-                        })}
-                    </ul>
-                }
+            <div className="form-group">
+                <label>{this.props.label}</label>
+                <textarea placeholder={this.props.placeholder} onInput={this.props.handler} name={this.props.pattern} data-pattern={this.props.pattern} required={this.props.required} className="input-lg form-control"></textarea>
+
+                {!this.props.valid ? <span className="warning-text">{this.props.errorMessage}</span> : ''}
             </div>
         );
     }
@@ -108,6 +105,6 @@ var ResultItem = React.createClass({
 
 
 
-var container = document.getElementById('task'); 
+var container = document.getElementById('task');
 
-ReactDOM.render(<ResultList><ResultItem /></ResultList>, container); 
+ReactDOM.render(<Form />, container); 
