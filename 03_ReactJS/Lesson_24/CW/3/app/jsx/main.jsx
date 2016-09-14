@@ -42,7 +42,7 @@ const routes = {
     childRoutes: [
         { path: 'view1', component: View1 },
         { path: 'view2', component: View2 },
-        { path: '*', component: Home }
+        { path: '*', component: Home, onEnter: ({ params }, replace) => replace(`/`) }
     ]
 } 
 

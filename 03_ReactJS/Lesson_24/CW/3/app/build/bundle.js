@@ -164,7 +164,10 @@
 	    path: '/',
 	    component: App,
 	    indexRoute: { component: Home },
-	    childRoutes: [{ path: 'view1', component: View1 }, { path: 'view2', component: View2 }, { path: '*', component: Home }]
+	    childRoutes: [{ path: 'view1', component: View1 }, { path: 'view2', component: View2 }, { path: '*', component: Home, onEnter: function onEnter(_ref, replace) {
+	            var params = _ref.params;
+	            return replace('/');
+	        } }]
 	};
 	
 	_reactDom2.default.render(_react2.default.createElement(Router, { routes: routes, history: browserHistory }), document.getElementById('task'));
