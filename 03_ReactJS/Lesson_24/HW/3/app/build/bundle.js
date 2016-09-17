@@ -28358,7 +28358,7 @@
 	                        this.props.route.users.map(function (user, item) {
 	                            return React.createElement(
 	                                'tr',
-	                                null,
+	                                { key: item },
 	                                React.createElement(
 	                                    'td',
 	                                    null,

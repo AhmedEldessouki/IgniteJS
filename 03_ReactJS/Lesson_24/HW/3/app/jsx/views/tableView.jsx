@@ -24,7 +24,7 @@ class TableView extends React.Component {
                         </thead>
                         <tbody>
                             {this.props.route.users.map((user, item) => {
-                                return <tr>
+                                return <tr key={item}>
                                     <td>
                                         <Link to={{ pathname: `listView/${user.id}`, query:
                                             {first_name: user.first_name, last_name: user.last_name, email: user.email,  gender: user.gender,  ip_address: user.ip_address} }}>{user.first_name}</Link>
